@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import TextField from "@material-ui/core/TextField";
 import ChatBubble from "../ChatBubble/ChatBubble";
+import Container from "@material-ui/core/Container";
 
 const styles = theme => ({
     root: {
@@ -36,26 +37,28 @@ class ChatScreen extends Component {
                     </Grid>
                     {/*Chat Box*/}
                     <br/>
-                    <Grid container direction={"row"} alignItems="center" justify="center">
-                        <Grid item xs={10}>
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Enter Your Message here!!!"
-                                variant="outlined"
-                                fullWidth={true}
-                            />
+                    <Container maxWidth={'sm'}>
+                        <Grid container direction={"row"} alignItems="center" justify="center">
+                            <Grid item xs={11}>
+                                <TextField
+                                    required
+                                    id="outlined-required"
+                                    label="Enter Your Message here!!!"
+                                    variant="outlined"
+                                    fullWidth={true}
+                                />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.button}
+                                >
+                                    <Icon>send</Icon>
+                                </Button>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={2}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                className={classes.button}
-                            >
-                                <Icon>send</Icon>
-                            </Button>
-                        </Grid>
-                    </Grid>
+                    </Container>
                 </Paper>
             </div>
         );
