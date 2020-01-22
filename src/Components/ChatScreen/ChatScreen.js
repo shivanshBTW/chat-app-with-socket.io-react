@@ -28,7 +28,7 @@ class ChatScreen extends Component {
 
    constructor(props) {
       super(props);
-      this.socket = openSocket('http://localhost:8000');
+      this.socket = openSocket('http://192.168.0.67:8000');
       this.state = {
          messages: [],
          input: '',
@@ -40,14 +40,13 @@ class ChatScreen extends Component {
 
    subscribeToMessages = () => {
       this.socket.on('messageReceived', (messageObj) => {
-         console.log(messageObj);
          this.setState({...this.state, messages: [...this.state.messages, messageObj]})
       });
    };
 
    handleMessageSubmit = () => {
-      console.log('lmoa');
       this.socket.emit('messageSent', {username: this.state.username, text: this.state.input});
+      this.setState({input:''})
    }
 
    handleChange = (e) => {
