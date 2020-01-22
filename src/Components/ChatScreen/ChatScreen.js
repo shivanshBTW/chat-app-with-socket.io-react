@@ -8,6 +8,7 @@ import TextField from "@material-ui/core/TextField";
 import ChatBubble from "../ChatBubble/ChatBubble";
 import Container from "@material-ui/core/Container";
 import {connect} from "react-redux";
+import openSocket from "socket.io-client";
 
 const styles = theme => ({
    root: {
@@ -22,11 +23,29 @@ const styles = theme => ({
 });
 
 class ChatScreen extends Component {
+
+
    constructor(props) {
       super(props);
+      this.socket = openSocket('http://localhost:8000');
       this.state = {
-         input: ''
-      }
+         messages: [ ],
+         input: '',
+         username: 'alpha'
+      };
+      this.subscribeToMessages();
+   }
+
+   subscribeToMessages = () => {
+      this.socket.on('messageReceived', (messageObj) => {
+         console.log(messageObj);
+         this.setState({...this.state, messages: [...this.state.messages, messageObj]})
+      });
+   };
+
+   handleMessageSubmit = () => {
+      console.log('lmoa');
+      this.socket.emit('messageSent', {username:this.state.username,text:this.state.input});
    }
 
    handleChange = (e) => {
@@ -41,7 +60,7 @@ class ChatScreen extends Component {
                {/*Chat Body*/}
                <Container maxWidth={'md'}>
                   <Grid container direction={"row"} justify="center" alignItems="center">
-                     {this.props.messages.map(message => {
+                     {this.state.messages.map(message => {
                         return (
                            <Grid item xs={7}>
                               <ChatBubble username={message.username} message={message.text}/>
@@ -70,6 +89,7 @@ class ChatScreen extends Component {
                            variant="contained"
                            color="primary"
                            className={classes.button}
+                           onClick={this.handleMessageSubmit}
                         >
                            <Icon>send</Icon>
                         </Button>
@@ -82,10 +102,4 @@ class ChatScreen extends Component {
    }
 }
 
-let mapStateToProps = (state) => {
-   return {
-      messages: state.messages
-   }
-};
-
-export default connect(mapStateToProps)(withStyles(styles)(ChatScreen));
+export default withStyles(styles)(ChatScreen);

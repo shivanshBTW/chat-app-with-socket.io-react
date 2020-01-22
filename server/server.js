@@ -1,15 +1,16 @@
-let app = require('express')();
-let http = require('http').createServer(app);
-let io = require('socket.io')();
+const io = require('socket.io')();
 
-app.get('/', function(req, res){
-    res.send('<h1>Hello world</h1>');
+io.on('connection', (client) => {
+    console.log('connection made');
+    client.on('messageSent', (messageObj) => {
+        // socketasdad[messageObj] = io.sockets;
+        console.log(`${messageObj.username} sent a message: ${messageObj.text}`);
+        io.emit('messageReceived', messageObj);
+    });
 });
 
-io.on('connection',(socket)=>{
-    console.log('a user connected');
-});
 
-http.listen(3001, function(){
-    console.log('listening on *:3001');
-});
+
+const port = 8000;
+io.listen(port);
+console.log('listening on port ', port);

@@ -1,20 +1,24 @@
-import React from 'react';
+import React, {Component} from 'react';
 import './App.css';
 import TopNav from "./Components/TopNav/TopNav";
 import ChatScreen from "./Components/ChatScreen/ChatScreen";
-import io from 'socket.io-client'
 
-let socket;
+class App extends Component{
+   constructor(props) {
+      super(props);
+      this.state = {
+         timestamp: 'no timestamp yet'
+      };
+   }
 
-
-
-function App() {
-  return (
-    <div className="App">
-        <TopNav/>
-        <ChatScreen/>
-    </div>
-  );
+   render(){
+      return (
+         <div className="App">
+            <TopNav/>
+            <ChatScreen/>
+         </div>
+      );
+   }
 }
 
 export default App;
