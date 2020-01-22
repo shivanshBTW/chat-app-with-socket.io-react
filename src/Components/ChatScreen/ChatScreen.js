@@ -14,6 +14,7 @@ const styles = theme => ({
    root: {
       margin: `${theme.spacing(3)}px ${theme.spacing(5)}px`,
       padding: theme.spacing(3),
+      maxWidth: theme.spacing(70),
       height: '100%'
    },
    button: {
@@ -55,49 +56,51 @@ class ChatScreen extends Component {
    render() {
       let {classes} = this.props;
       return (
-         <div>
-            <Paper variant="elevation" elevation={3} className={classes.root}>
-               {/*Chat Body*/}
-               <Container maxWidth={'md'}>
-                  <Grid container direction={"row"} justify="center" alignItems="center">
-                     {this.state.messages.map(message => {
-                        return (
-                           <Grid item xs={7}>
-                              <ChatBubble username={message.username} message={message.text}/>
-                           </Grid>
-                        )
-                     })}
-                  </Grid>
-               </Container>
-               {/*Chat Box*/}
-               <br/>
-               <Container maxWidth={'xs'}>
-                  <Grid container direction={"row"} alignItems="center" justify="center">
-                     <Grid item xs={10}>
-                        <TextField
-                           id="outlined-required"
-                           label="Enter Your Message"
-                           value={this.state.input}
-                           onChange={this.handleChange}
-                           name={'input'}
-                           variant="outlined"
-                           fullWidth={true}
-                        />
+         <Grid container direction="row" justify="center" alignItems="flex-start" >
+            <Grid item xs={6}>
+               <Paper variant="elevation" elevation={3} className={classes.root}>
+                  {/*Chat Body*/}
+                  <Container maxWidth={'md'}>
+                     <Grid container direction={"row"} justify="center" alignItems="center">
+                        {this.state.messages.map(message => {
+                           return (
+                              <Grid item xs={7}>
+                                 <ChatBubble username={message.username} message={message.text}/>
+                              </Grid>
+                           )
+                        })}
                      </Grid>
-                     <Grid item xs={2}>
-                        <Button
-                           variant="contained"
-                           color="primary"
-                           className={classes.button}
-                           onClick={this.handleMessageSubmit}
-                        >
-                           <Icon>send</Icon>
-                        </Button>
+                  </Container>
+                  {/*Chat Box*/}
+                  <br/>
+                  <Container maxWidth={'xs'}>
+                     <Grid container direction={"row"} alignItems="center" justify="center">
+                        <Grid item xs={10}>
+                           <TextField
+                              id="outlined-required"
+                              label="Enter Your Message"
+                              value={this.state.input}
+                              onChange={this.handleChange}
+                              name={'input'}
+                              variant="outlined"
+                              fullWidth={true}
+                           />
+                        </Grid>
+                        <Grid item xs={2}>
+                           <Button
+                              variant="contained"
+                              color="primary"
+                              className={classes.button}
+                              onClick={this.handleMessageSubmit}
+                           >
+                              <Icon>send</Icon>
+                           </Button>
+                        </Grid>
                      </Grid>
-                  </Grid>
-               </Container>
-            </Paper>
-         </div>
+                  </Container>
+               </Paper>
+            </Grid>
+         </Grid>
       );
    }
 }
