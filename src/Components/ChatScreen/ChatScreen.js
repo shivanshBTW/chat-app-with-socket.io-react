@@ -30,9 +30,10 @@ class ChatScreen extends Component {
       super(props);
       this.socket = openSocket('http://localhost:8000');
       this.state = {
-         messages: [ ],
+         messages: [],
          input: '',
-         username: 'alpha'
+         username: '',
+         usernameSubmitted: false
       };
       this.subscribeToMessages();
    }
@@ -46,7 +47,7 @@ class ChatScreen extends Component {
 
    handleMessageSubmit = () => {
       console.log('lmoa');
-      this.socket.emit('messageSent', {username:this.state.username,text:this.state.input});
+      this.socket.emit('messageSent', {username: this.state.username, text: this.state.input});
    }
 
    handleChange = (e) => {
@@ -56,51 +57,89 @@ class ChatScreen extends Component {
    render() {
       let {classes} = this.props;
       return (
-         <Grid container direction="row" justify="center" alignItems="flex-start" >
-            <Grid item xs={6}>
-               <Paper variant="elevation" elevation={3} className={classes.root}>
-                  {/*Chat Body*/}
-                  <Container maxWidth={'md'}>
-                     <Grid container direction={"row"} justify="center" alignItems="center">
-                        {this.state.messages.map(message => {
-                           return (
-                              <Grid item xs={7}>
-                                 <ChatBubble username={message.username} message={message.text}/>
+         <>
+            {this.state.usernameSubmitted ? (
+               <Grid container direction="row" justify="center" alignItems="flex-start">
+                  <Grid item xs={6}>
+                     <Paper variant="elevation" elevation={3} className={classes.root}>
+                        {/*Chat Body*/}
+                        <Container maxWidth={'md'}>
+                           <Grid container direction={"row"} justify="center" alignItems="center">
+                              {this.state.messages.map((message,index) => {
+                                 return (
+                                    <Grid item xs={7} key={index}>
+                                       <ChatBubble username={message.username} message={message.text}/>
+                                    </Grid>
+                                 )
+                              })}
+                           </Grid>
+                        </Container>
+                        {/*Chat Box*/}
+                        <br/>
+                        <Container maxWidth={'xs'}>
+                           <Grid container direction={"row"} alignItems="center" justify="center">
+                              <Grid item xs={10}>
+                                 <TextField
+                                    id="outlined-required"
+                                    label="Enter Your Message"
+                                    value={this.state.input}
+                                    onChange={this.handleChange}
+                                    name={'input'}
+                                    variant="outlined"
+                                    fullWidth={true}
+                                 />
                               </Grid>
-                           )
-                        })}
-                     </Grid>
-                  </Container>
-                  {/*Chat Box*/}
-                  <br/>
-                  <Container maxWidth={'xs'}>
-                     <Grid container direction={"row"} alignItems="center" justify="center">
-                        <Grid item xs={10}>
-                           <TextField
-                              id="outlined-required"
-                              label="Enter Your Message"
-                              value={this.state.input}
-                              onChange={this.handleChange}
-                              name={'input'}
-                              variant="outlined"
-                              fullWidth={true}
-                           />
-                        </Grid>
-                        <Grid item xs={2}>
-                           <Button
-                              variant="contained"
-                              color="primary"
-                              className={classes.button}
-                              onClick={this.handleMessageSubmit}
-                           >
-                              <Icon>send</Icon>
-                           </Button>
-                        </Grid>
-                     </Grid>
-                  </Container>
-               </Paper>
-            </Grid>
-         </Grid>
+                              <Grid item xs={2}>
+                                 <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.button}
+                                    onClick={this.handleMessageSubmit}
+                                 >
+                                    <Icon>send</Icon>
+                                 </Button>
+                              </Grid>
+                           </Grid>
+                        </Container>
+                     </Paper>
+                  </Grid>
+               </Grid>
+            ) : (
+               <Grid container direction="row" justify="center" alignItems="flex-start">
+                  <Grid item xs={6}>
+                     <Paper variant="elevation" elevation={3} className={classes.root}>
+                        <Container maxWidth={'xs'}>
+                           <Grid container direction={"row"} alignItems="center" justify="center">
+                              <Grid item xs={10}>
+                                 <TextField
+                                    id="outlined-required"
+                                    label="Enter your username"
+                                    value={this.state.username}
+                                    onChange={this.handleChange}
+                                    name={'username'}
+                                    variant="outlined"
+                                    fullWidth={true}
+                                 />
+                              </Grid>
+                              <Grid item xs={2}>
+                                 <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.button}
+                                    onClick={() => {
+                                       this.setState({usernameSubmitted: true})
+                                    }}
+                                 >
+                                    <Icon>send</Icon>
+                                 </Button>
+                              </Grid>
+                           </Grid>
+                        </Container>
+                     </Paper>
+                  </Grid>
+               </Grid>
+            )}
+         </>
       );
    }
 }
